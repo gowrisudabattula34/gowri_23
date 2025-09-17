@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GreenFields — Farmers Market & Services</title>
+  <meta name="description" content="GreenFields: connect farmers to buyers — produce marketplace, services, and resources." />
+  <style>
+    /* Basic Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#1f2937;line-height:1.4}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* Layout */
+    .container{max-width:1100px;margin:0 auto;padding:1rem}
+    header{background:linear-gradient(90deg,#0f766e,#065f46);color:white}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 1rem}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
+    .brand .logo{width:40px;height:40px;border-radius:8px;background:#bbf7d0;display:flex;align-items:center;justify-content:center;color:#065f46;font-weight:800}
+    nav ul{display:flex;gap:1rem;list-style:none}
+    .btn{display:inline-block;padding:.5rem .9rem;border-radius:8px;background:#f8fafc;color:#065f46;font-weight:600;border:2px solid rgba(255,255,255,.12)}
+    .hero{display:grid;grid-template-columns:1fr;gap:1.2rem;padding:2.2rem 1rem}
+    .hero-inner{display:flex;flex-direction:column;gap:.8rem}
+    .hero h1{font-size:clamp(1.6rem,3vw,2.4rem);line-height:1.05}
+    .hero p{color:#d1fae5;max-width:60ch}
+
+    /* Cards and grid */
+    .grid{display:grid;gap:1rem}
+    .products{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+    .card{background:white;border-radius:10px;padding:0.8rem;box-shadow:0 6px 14px rgba(2,6,23,0.08);border:1px solid #eef2f7}
+    .card img{border-radius:8px;height:130px;object-fit:cover}
+    .card h3{font-size:1rem;margin-top:.6rem}
+    .price{font-weight:700;color:#065f46}
+
+    /* Sections */
+    section{padding:2rem 1rem}
+    .section-title{display:flex;align-items:baseline;gap:.6rem;margin-bottom:1rem}
+    .section-title h2{font-size:1.1rem}
+
+    /* Marketplace filter row */
+    .controls{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
+    .input,select{padding:.5rem .6rem;border:1px solid #e6edf0;border-radius:8px}
+
+    /* About/Services list */
+    .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+
+    /* Contact */
+    form{display:grid;gap:.6rem}
+    label{font-size:.85rem}
+    textarea,input[type="text"],input[type="email"]{padding:.6rem;border-radius:8px;border:1px solid #e6edf0;width:100%}
+    .row{display:flex;gap:.6rem;flex-wrap:wrap}
+
+    /* Footer */
+    footer{background:#0b3b2e;color:#d1fae5;padding:1rem}
+    .footer-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+
+    /* Responsive & small helpers */
+    .muted{color:#6b7280}
+    .center{display:flex;align-items:center;justify-content:center}
+    .mobile-toggle{display:none;border:0;background:transparent;color:white;font-weight:700}
+
+    @media (min-width:720px){
+      .hero{grid-template-columns:1fr 420px;align-items:center}
+      nav ul{gap:1.2rem}
+      .mobile-toggle{display:none}
+    }
+
+    @media (max-width:719px){
+      nav ul{display:none}
+      .mobile-toggle{display:block}
+      .nav.open ul{display:flex;flex-direction:column;background:rgba(0,0,0,.06);position:absolute;right:1rem;top:64px;padding:.6rem;border-radius:8px}
+      .hero p{max-width:unset}
+      .footer-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+  <style>
+    body{margin:0;font-family:sans-serif;background:#f9fafb;color:#1f2937}
+    header{background:#047857;color:white;padding:1rem;display:flex;justify-content:space-between;align-items:center}
+    header h1{font-size:1.2rem;margin:0}
+    nav{display:flex;gap:1rem}
+    nav a{color:white;text-decoration:none;font-weight:600}
+    main{padding:1rem}
+    .card{background:white;padding:1rem;margin:.5rem 0;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,.08)}
+    .grid{display:grid;gap:1rem}
+    .products{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+    .card img{width:100%;height:120px;object-fit:cover;border-radius:6px}
+    .btn{display:inline-block;background:#047857;color:white;padding:.5rem .8rem;border-radius:6px;margin-top:.5rem;text-align:center}
+    footer{background:#065f46;color:white;text-align:center;padding:.8rem;font-size:.9rem;margin-top:1rem}
+    /* mobile nav */
+    @media(max-width:600px){
+      nav{flex-direction:column;gap:.5rem}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌱 Farmers App</h1>
+    <nav>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#market">Market</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Dashboard -->
+    <section id="dashboard">
+      <h2>Dashboard</h2>
+      <div class="card">
+        <p>👩‍🌾 Welcome, Farmer!</p>
+        <p>Weather: ☀️ Sunny, 32°C</p>
+        <p>Next Crop Tip: Water your paddy fields in the evening.</p>
+      </div>
+    </section>
+
+    <!-- Marketplace -->
+    <section id="market">
+      <h2>Marketplace</h2>
+      <div class="grid products">
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?w=400" alt="Tomatoes">
+          <h3>Tomatoes</h3>
+          <p>₹40 / kg</p>
+          <a href="#" class="btn">Buy</a>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=400" alt="Mangoes">
+          <h3>Mangoes</h3>
+          <p>₹120 / dozen</p>
+          <a href="#" class="btn">Buy</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services">
+      <h2>Services</h2>
+      <div class="card">
+        <h3>Logistics</h3>
+        <p>We help transport your crops to markets and buyers safely.</p>
+      </div>
+      <div class="card">
+        <h3>Crop Advisory</h3>
+        <p>Get expert tips on farming techniques and pest management.</p>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <h2>Contact / List Produce</h2>
+      <form onsubmit="submitForm(event)">
+        <div class="card">
+          <label>Name:</label><br>
+          <input type="text" id="name" required><br><br>
+          <label>Product:</label><br>
+          <input type="text" id="product" required><br><br>
+          <label>Message:</label><br>
+          <textarea id="message"></textarea><br><br>
+          <button class="btn" type="submit">Submit</button>
+          <p id="formMsg"></p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Farmers App
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent=new Date().getFullYear();
+    function submitForm(e){
+      e.preventDefault();
+      document.getElementById("formMsg").textContent="✅ Thanks! Your listing is submitted.";
+      e.target.reset();
+    }
+  </script>
+
+<body>
+  <header>
+    <div class="container nav" id="topNav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">GF</div>
+        <div>
+          <div>GreenFields</div>
+          <div style="font-size:.8rem;color:rgba(255,255,255,.85);font-weight:600">Farmers Market & Services</div>
+        </div>
+      </div>
+
+      <button class="mobile-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav">☰</button>
+
+      <nav id="mainNav" aria-label="Main navigation">
+        <ul>
+          <li><a href="#market">Marketplace</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a class="btn" href="#list">List Produce</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="container hero" role="region" aria-label="Introduction">
+      <div class="hero-inner">
+        <h1>Connect with local farmers. Fresh produce, fair prices.</h1>
+        <p>GreenFields helps farmers reach buyers, sell fresh produce directly, and access tools & services — logistics, weather advisories, and micro-loans.</p>
+
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem">
+          <a class="btn" href="#market">Browse Marketplace</a>
+          <a href="#about" style="display:inline-flex;align-items:center;padding:.5rem .9rem;border-radius:8px;background:rgba(255,255,255,.12);color:white">Learn how it works</a>
+        </div>
+
+        <div style="margin-top:.9rem;color:#bbf7d0;font-size:.95rem">Trusted by 2,400+ farmers & buyers</div>
+      </div>
+
+      <aside class="card" aria-label="Quick stats">
+        <h3 style="margin-bottom:.4rem">Quick Stats</h3>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+          <div class="card" style="padding:.6rem;flex:1">
+            <div class="muted">Products</div>
+            <div style="font-weight:800;font-size:1.2rem">1.2k+</div>
+          </div>
+          <div class="card" style="padding:.6rem;flex:1">
+            <div class="muted">Active Farmers</div>
+            <div style="font-weight:800;font-size:1.2rem">650+</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main class="container" id="content" tabindex="-1">
+    <!-- Marketplace -->
+    <section id="market" aria-labelledby="marketTitle">
+      <div class="section-title">
+        <h2 id="marketTitle">Marketplace — Fresh from farms</h2>
+        <div style="margin-left:auto;color:#6b7280">Sort & filter</div>
+      </div>
+
+      <div class="controls" role="search" aria-label="Filter products">
+        <input class="input" id="search" placeholder="Search produce (e.g., tomatoes, rice)" />
+        <select id="category">
+          <option value="">All categories</option>
+          <option>Vegetables</option>
+          <option>Fruits</option>
+          <option>Grains</option>
+          <option>Dairy</option>
+        </select>
+        <select id="sortBy">
+          <option value="popular">Most popular</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+        </select>
+        <button class="btn" id="clearFilters">Clear</button>
+      </div>
+
+      <div class="grid products" id="productsGrid" aria-live="polite" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <!-- Example product cards -->
+        <article class="card" data-category="Vegetables" data-price="40">
+          <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?q=80&w=800&auto=format&fit=crop" alt="Fresh tomatoes in crate">
+          <h3>Tomatoes — 1 kg</h3>
+          <div class="price">₹40 / kg</div>
+          <p class="muted" style="font-size:.9rem">From: Ram farms, Andhra Pradesh</p>
+          <div style="margin-top:.6rem;display:flex;gap:.5rem">
+            <button class="btn" onclick="addToCart('Tomatoes',40)">Buy</button>
+            <a href="#list" style="align-self:center">Contact farmer</a>
+          </div>
+        </article>
+
+        <article class="card" data-category="Fruits" data-price="120">
+          <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?q=80&w=800&auto=format&fit=crop" alt="Mangoes basket">
+          <h3>Alphonso Mango — 1 dozen</h3>
+          <div class="price">₹120 / dozen</div>
+          <p class="muted" style="font-size:.9rem">From: Krishna Orchards, Maharashtra</p>
+          <div style="margin-top:.6rem;display:flex;gap:.5rem">
+            <button class="btn" onclick="addToCart('Mango',120)">Buy</button>
+            <a href="#list">Contact farmer</a>
+          </div>
+        </article>
+
+        <article class="card" data-category="Grains" data-price="45">
+          <img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?q=80&w=800&auto=format&fit=crop" alt="Bags of grain">
+          <h3>Organic Rice — 1 kg</h3>
+          <div class="price">₹45 / kg</div>
+          <p class="muted" style="font-size:.9rem">From: Sree Agro, Tamil Nadu</p>
+          <div style="margin-top:.6rem;display:flex;gap:.5rem">
+            <button class="btn" onclick="addToCart('Rice',45)">Buy</button>
+            <a href="#list">Contact farmer</a>
+          </div>
+        </article>
+
+        <!-- Add more product cards as needed -->
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" aria-labelledby="servicesTitle">
+      <div class="section-title">
+        <h2 id="servicesTitle">Services for farmers</h2>
+      </div>
+
+      <div class="services">
+        <div class="card">
+          <h3>Logistics</h3>
+          <p class="muted">Cold chain pickup, regional transport, and delivery coordination for bulk orders.</p>
+        </div>
+        <div class="card">
+          <h3>Market Price Alerts</h3>
+          <p class="muted">Daily price updates and demand trends so you can choose the best time to sell.</p>
+        </div>
+        <div class="card">
+          <h3>Microfinance</h3>
+          <p class="muted">Connect with trusted micro-lenders for seeds, tools, and emergency cashflow.</p>
+        </div>
+        <div class="card">
+          <h3>Training & Resources</h3>
+          <p class="muted">Crop management guides, pest control tips, and sustainable practices.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" aria-labelledby="aboutTitle">
+      <div class="section-title">
+        <h2 id="aboutTitle">About GreenFields</h2>
+      </div>
+      <div style="display:grid;gap:.8rem">
+        <p class="muted">GreenFields is built to empower small & medium farmers with better market access, transparency, and support services. We prioritize sustainable practices, fair pricing, and direct farmer-to-buyer connections.</p>
+        <p class="muted">If you're a farmer wanting to list produce or a buyer looking for bulk supplies, use the "List Produce" or "Browse Marketplace" actions above.</p>
+      </div>
+    </section>
+
+    <!-- Contact / List produce -->
+    <section id="contact" aria-labelledby="contactTitle">
+      <div class="section-title">
+        <h2 id="contactTitle">Contact / List your produce</h2>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr;gap:1rem;">
+        <form id="contactForm" onsubmit="submitForm(event)" aria-label="List produce form">
+          <div class="row">
+            <div style="flex:1">
+              <label for="name">Your name</label>
+              <input id="name" type="text" placeholder="Farmer or buyer name" required />
+            </div>
+            <div style="flex:1">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="you@example.com" required />
+            </div>
+          </div>
+
+          <div>
+            <label for="produce">Produce / Service</label>
+            <input id="produce" type="text" placeholder="e.g., Tomatoes — 100 kg / week" required />
+          </div>
+
+          <div>
+            <label for="message">Message (optional)</label>
+            <textarea id="message" rows="4" placeholder="Any extra details like price, pickup, organic, certifications..."></textarea>
+          </div>
+
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <button class="btn" type="submit">Submit listing</button>
+            <div id="formMsg" class="muted" role="status" aria-live="polite"></div>
+          </div>
+        </form>
+
+        <aside class="card">
+          <h3>Need help?</h3>
+          <p class="muted">Call our support: <strong>+91 98765 43210</strong> or email <strong>support@greenfields.example</strong></p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+        <div>
+          <strong>GreenFields</strong><div class="muted" style="font-size:.9rem">Connecting farms to tables</div>
+        </div>
+        <div class="muted">© <span id="year"></span> GreenFields. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // small utilities & UI behavior
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const topNav = document.getElementById('topNav');
+    navToggle && navToggle.addEventListener('click', () => {
+      const open = topNav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', String(open));
+    });
+
+    // Simple product filtering
+    const productsGrid = document.getElementById('productsGrid');
+    const search = document.getElementById('search');
+    const category = document.getElementById('category');
+    const sortBy = document.getElementById('sortBy');
+    const clearBtn = document.getElementById('clearFilters');
+
+    function renderProducts() {
+      const items = Array.from(productsGrid.querySelectorAll('article.card'));
+      const q = search.value.trim().toLowerCase();
+      const cat = category.value;
+      // filter
+      let visible = items.filter(item => {
+        const text = (item.textContent || '').toLowerCase();
+        const matchesQ = q === '' || text.includes(q);
+        const matchesCat = !cat || item.dataset.category === cat;
+        return matchesQ && matchesCat;
+      });
+
+      // sort
+      const mode = sortBy.value;
+      visible.sort((a,b) => {
+        const pa = Number(a.dataset.price || 0);
+        const pb = Number(b.dataset.price || 0);
+        if(mode === 'price-asc') return pa - pb;
+        if(mode === 'price-desc') return pb - pa;
+        return 0; // leave default order for popular
+      });
+
+      // re-attach in order, hide others
+      items.forEach(i => i.style.display = 'none');
+      visible.forEach(v => { v.style.display = ''; productsGrid.appendChild(v); });
+    }
+
+    [search, category, sortBy].forEach(el => el && el.addEventListener('input', renderProducts));
+    clearBtn.addEventListener('click', () => {
+      search.value = ''; category.value = ''; sortBy.value = 'popular'; renderProducts();
+    });
+
+    // initial render
+    renderProducts();
+
+    // Simple "Add to cart" demo
+    function addToCart(name,price){
+      alert('Added to cart: ' + name + ' — ₹' + price);
+    }
+
+    // Contact form submission (demo: validate then clear)
+    function submitForm(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const produce = document.getElementById('produce').value.trim();
+      const msgEl = document.getElementById('formMsg');
+
+      if(!name || !email || !produce){
+        msgEl.textContent = 'Please fill required fields.';
+        return;
+      }
+
+      // Pretend to send to server (demo only)
+      msgEl.textContent = 'Sending...';
+      setTimeout(() => {
+        msgEl.textContent = 'Thanks — your listing is submitted. We will contact you soon.';
+        document.getElementById('contactForm').reset();
+      }, 700);
+    }
+  </script>
+  
+  <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Farmers Profit Tips — Grow Smarter, Earn More</title>
+  <meta name="description" content="Actionable profitability tips for farmers, plus a handy profit & ROI calculator."/>
+  <style>
+    :root{
+      --accent:#166534; /* green */
+      --muted:#6b7280;
+      --card:#ffffff;
+      --back:#f7f9f8;
+      --glass:rgba(10,10,10,0.04);
+      --maxw:1100px;
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:#052018;background:var(--back);-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:var(--maxw);margin:0 auto;padding:1rem}
+    header{background:linear-gradient(90deg,var(--accent),#0b754b);color:white;padding:1rem;border-radius:0 0 16px 16px}
+    header .top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    header h1{font-size:1.2rem;margin:0}
+    nav{display:flex;gap:.6rem;align-items:center}
+    nav button{background:transparent;border:1px solid rgba(255,255,255,.12);color:white;padding:.45rem .7rem;border-radius:9px;font-weight:600;cursor:pointer}
+    main{margin-top:1rem}
+    .hero{display:grid;grid-template-columns:1fr 340px;gap:1rem;align-items:start}
+    .card{background:var(--card);border-radius:var(--radius);padding:1rem;box-shadow:0 6px 18px rgba(3,7,7,0.06);border:1px solid #e9f0ea}
+    .lead{color:#064e3b;font-weight:700}
+    .muted{color:var(--muted)}
+    .tips-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .tip{padding:.9rem;border-radius:10px;background:linear-gradient(180deg,#ffffff,#f3fff6);border:1px solid #e6f2ea}
+    .tip h3{margin:0 0 .4rem;font-size:1rem}
+    .badge{display:inline-block;padding:.25rem .5rem;border-radius:999px;font-size:.75rem;background:var(--glass);color:var(--muted);margin-right:.4rem}
+    .controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+    .input,select{padding:.5rem .6rem;border-radius:8px;border:1px solid #e3eee2;background:white;min-width:0}
+    .btn{padding:.55rem .8rem;border-radius:10px;border:0;background:var(--accent);color:white;font-weight:700;cursor:pointer}
+    .small{font-size:.9rem}
+    /* Calculator */
+    .calc-row{display:flex;gap:.5rem;flex-wrap:wrap}
+    .calc-row > *{flex:1;min-width:140px}
+    .result{font-size:1.05rem;font-weight:800;color:#065f46;padding:.6rem;border-radius:8px;background:#f0fff6;border:1px solid #d7f6df}
+    /* Newsletter */
+    .newsletter{display:flex;gap:.5rem;align-items:center}
+    .newsletter input{flex:1;padding:.5rem;border-radius:8px;border:1px solid #e6efe6}
+    /* Footer */
+    footer{margin-top:1.2rem;color:var(--muted);text-align:center;padding:.8rem 0}
+    /* responsive */
+    @media(max-width:980px){ .hero{grid-template-columns:1fr} nav{display:none} }
+    @media(max-width:520px){ .calc-row{flex-direction:column} .hero{gap:.8rem} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container top">
+      <div>
+        <h1>Farmers Profit Tips</h1>
+        <div class="muted small">Actionable tips, calculators & resources to improve farm profitability</div>
+      </div>
+      <nav aria-label="site">
+        <button onclick="scrollToId('tips')">Tips</button>
+        <button onclick="scrollToId('calculator')">Profit Calculator</button>
+        <button onclick="downloadTips()">Print Tips</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="page">
+    <section class="hero" aria-labelledby="introTitle">
+      <div>
+        <div class="card" role="region" aria-labelledby="introTitle">
+          <h2 id="introTitle" class="lead">Increase profits with practical farming strategies</h2>
+          <p class="muted">Lower costs, increase yield quality, and access better markets. Use the tips below and try the profit calculator to see immediate impact on your margins.</p>
+
+          <div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap">
+            <div>
+              <strong class="small">Quick wins</strong>
+              <ul class="small muted">
+                <li>Improve post-harvest handling to reduce loss.</li>
+                <li>Negotiate bulk contracts with buyers.</li>
+                <li>Use integrated pest management (IPM) to cut pesticide costs.</li>
+              </ul>
+            </div>
+
+            <div style="min-width:160px">
+              <strong class="small">Focus areas</strong>
+              <div class="small muted">
+                Soil health · Market linkages · Efficient irrigation · Value addition
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:1rem"></div>
+
+        <div class="card" id="tips" aria-labelledby="tipsTitle">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <h2 id="tipsTitle" style="margin:0">Profit Tips</h2>
+            <div class="small muted">Filter & search</div>
+          </div>
+
+          <div class="controls" style="margin-top:.7rem">
+            <input class="input" id="searchTips" placeholder="Search tips (e.g., storage, market, inputs)" oninput="renderTips()" />
+            <select id="categoryFilter" class="input" onchange="renderTips()">
+              <option value="">All categories</option>
+              <option>Costs</option>
+              <option>Yield</option>
+              <option>Post-harvest</option>
+              <option>Marketing</option>
+              <option>Value-add</option>
+            </select>
+            <button class="btn" onclick="resetFilters()">Clear</button>
+          </div>
+
+          <div class="tips-grid" id="tipsGrid" style="margin-top:.8rem"></div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card" id="calculator" aria-labelledby="calcTitle">
+          <h2 id="calcTitle" style="margin:0 0 .6rem">Profit & ROI Calculator</h2>
+          <p class="small muted">Estimate profits per hectare (or per acre) — experiment with prices, yields and costs.</p>
+
+          <div style="height:.6rem"></div>
+          <label class="small">Area</label>
+          <div class="calc-row">
+            <input class="input" id="area" type="number" min="0" step="0.01" placeholder="e.g., 1 (hectare)" />
+            <select id="areaUnit" class="input">
+              <option value="ha">Hectares</option>
+              <option value="acre">Acres</option>
+            </select>
+          </div>
+
+          <label class="small" style="margin-top:.6rem">Expected yield (per hectare/acre)</label>
+          <div class="calc-row">
+            <input class="input" id="yield" type="number" min="0" step="0.01" placeholder="e.g., 4 (tons)" />
+            <select id="yieldUnit" class="input">
+              <option value="ton">Tons</option>
+              <option value="kg">Kg</option>
+            </select>
+          </div>
+
+          <label class="small" style="margin-top:.6rem">Selling price (per unit)</label>
+          <div class="calc-row">
+            <input class="input" id="price" type="number" min="0" step="0.01" placeholder="e.g., 12000 (₹ per ton) or per kg" />
+            <select id="priceUnit" class="input">
+              <option value="perton">per ton</option>
+              <option value="perkg">per kg</option>
+            </select>
+          </div>
+
+          <label class="small" style="margin-top:.6rem">Total production costs (inputs, labor, transport)</label>
+          <input class="input" id="costs" type="number" min="0" step="0.01" placeholder="e.g., 30000 (₹ total for area)" />
+
+          <div style="margin-top:.8rem;display:flex;gap:.5rem">
+            <button class="btn" onclick="calculateProfit()">Calculate</button>
+            <button class="btn" style="background:#0f5132" onclick="clearCalculator()">Reset</button>
+          </div>
+
+          <div style="margin-top:.8rem" id="calcResults" aria-live="polite"></div>
+        </div>
+
+        <div style="height:1rem"></div>
+
+        <div class="card">
+          <h3 style="margin:0 .2rem .6rem 0">Newsletter</h3>
+          <p class="small muted">Get weekly profit tips to your inbox.</p>
+          <div class="newsletter" style="margin-top:.6rem">
+            <input id="emailNews" type="email" placeholder="you@example.com" />
+            <button class="btn" onclick="subscribe()">Subscribe</button>
+          </div>
+          <div id="newsMsg" class="small muted" style="margin-top:.6rem"></div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Resources and FAQ -->
+    <section style="margin-top:1rem" aria-labelledby="resTitle">
+      <div class="card">
+        <h2 id="resTitle">Resources & Quick Actions</h2>
+        <ul class="muted small">
+          <li><strong>Record keeping:</strong> Track input costs and yields — even simple notebooks help spot losses.</li>
+          <li><strong>Value addition:</strong> Drying, grading, or small packaging raises price per kg.</li>
+          <li><strong>Collective marketing:</strong> Cooperatives often fetch better prices and lower transport costs.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container small muted">© <span id="year"></span> Farmers Profit Tips — Use calculators responsibly. Estimates are illustrative.</div>
+  </footer>
+
+  <script>
+    // ---------- Sample tips dataset ----------
+    const TIPS = [
+      { id:1, title:"Reduce post-harvest loss with better storage", category:"Post-harvest", desc:"Invest in low-cost demarcated storage and drying platforms. Drying and moisture control can cut losses drastically." },
+      { id:2, title:"Switch to drip irrigation for water efficiency", category:"Costs", desc:"Drip or micro-sprinkler systems reduce water and fertilizer needs; initial cost is offset within 1-3 seasons for many crops." },
+      { id:3, title:"Group sales to negotiate better prices", category:"Marketing", desc:"Forming small producer groups helps negotiate bulk contracts and lowers transport per kg." },
+      { id:4, title:"Adopt integrated pest management (IPM)", category:"Costs", desc:"IPM reduces chemical input costs while maintaining yield by using targeted interventions and biological controls." },
+      { id:5, title:"Use improved seed varieties with local testing", category:"Yield", desc:"Select varieties adapted to your soil & climate for higher, more reliable yields." },
+      { id:6, title:"Value-add with simple processing", category:"Value-add", desc:"Cleaning, sorting, and basic packaging increase price — e.g., cleaned pulses or graded fruit boxes." },
+      { id:7, title:"Track and reduce labor peaks", category:"Costs", desc:"Plan crop calendar to avoid excessive labor hiring spikes; mechanize repetitive tasks where cost-effective." },
+      { id:8, title:"Monitor market prices before harvest", category:"Marketing", desc:"Selling at the right time and to the right buyer can increase revenue; use local mandi updates." },
+      { id:9, title:"Improve soil fertility with compost & green manure", category:"Yield", desc:"Healthy soils lead to consistent yields and lower fertilizer dependence over time." },
+      { id:10, title:"Consider contract farming for assured off-take", category:"Marketing", desc:"Contracts reduce market risk and ensure a buyer, sometimes with a guaranteed price." }
+    ];
+
+    // ---------- Render tips ----------
+    const tipsGrid = document.getElementById('tipsGrid');
+    function renderTips(){
+      const q = document.getElementById('searchTips').value.trim().toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+      tipsGrid.innerHTML = '';
+      const filtered = TIPS.filter(t => {
+        const inQ = q === '' || (t.title + ' ' + t.desc + ' ' + t.category).toLowerCase().includes(q);
+        const inCat = !cat || t.category === cat;
+        return inQ && inCat;
+      });
+
+      if(filtered.length === 0){
+        tipsGrid.innerHTML = '<div class="muted small">No tips match your search.</div>';
+        return;
+      }
+
+      filtered.forEach(t => {
+        const el = document.createElement('article');
+        el.className = 'tip';
+        el.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:.6rem">
+            <div>
+              <div class="badge">${t.category}</div>
+              <h3>${t.title}</h3>
+            </div>
+            <div class="small muted">Tip #${t.id}</div>
+          </div>
+          <p class="muted small" style="margin-top:.6rem">${t.desc}</p>
+          <div style="margin-top:.6rem;display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="btn" onclick="saveTip(${t.id})" style="background:#14532d">Save</button>
+            <button class="btn" onclick="shareTip(${t.id})" style="background:#0b6623">Share</button>
+          </div>
+        `;
+        tipsGrid.appendChild(el);
+      });
+    }
+
+    function resetFilters(){
+      document.getElementById('searchTips').value = '';
+      document.getElementById('categoryFilter').value = '';
+      renderTips();
+    }
+
+    function saveTip(id){
+      // simple local save demo
+      const saved = JSON.parse(localStorage.getItem('savedTips')||'[]');
+      if(!saved.includes(id)){ saved.push(id); localStorage.setItem('savedTips', JSON.stringify(saved)); alert('Tip saved to your device.') }
+      else alert('Tip already saved.')
+    }
+    function shareTip(id){
+      const tip = TIPS.find(t=>t.id===id);
+      if(navigator.share){
+        navigator.share({title:tip.title,text:tip.desc})
+          .catch(()=>alert('Share cancelled or not supported.'));
+      } else {
+        navigator.clipboard.writeText(tip.title + '\\n' + tip.desc)
+          .then(()=>alert('Tip copied to clipboard. Share it with buyers or friends.'))
+          .catch(()=>alert('Could not copy.'))
+      }
+    }
+
+    // ---------- Profit calculator ----------
+    function calculateProfit(){
+      const area = parseFloat(document.getElementById('area').value) || 0;
+      const areaUnit = document.getElementById('areaUnit').value; // ha or acre
+      const yieldVal = parseFloat(document.getElementById('yield').value) || 0;
+      const yieldUnit = document.getElementById('yieldUnit').value; // ton or kg
+      const price = parseFloat(document.getElementById('price').value) || 0;
+      const priceUnit = document.getElementById('priceUnit').value; // perton or perkg
+      const costs = parseFloat(document.getElementById('costs').value) || 0;
+
+      const resultsEl = document.getElementById('calcResults');
+      if(area <= 0 || yieldVal <= 0 || price <= 0){
+        resultsEl.innerHTML = '<div class="muted small">Please enter area, expected yield and price to calculate.</div>';
+        return;
+      }
+
+      // Normalize units to total weight in kg for the whole area
+      // If yieldUnit is ton -> convert to kg (1 ton = 1000 kg)
+      let yieldKgPerArea = yieldUnit === 'ton' ? yieldVal * 1000 : yieldVal; // kg per hectare/acre unit
+      // Determine total weight for the entered area
+      // if areaUnit is ha => totalKg = yieldKgPerArea * area
+      let totalKg = yieldKgPerArea * area;
+      // price: if perton -> convert to per kg
+      let pricePerKg = priceUnit === 'perton' ? (price / 1000) : price;
+
+      // Revenue
+      const revenue = totalKg * pricePerKg;
+
+      // Profit
+      const profit = revenue - costs;
+      // ROI = profit / costs * 100 (if costs > 0)
+      const roi = costs > 0 ? (profit / costs) * 100 : null;
+
+      // Per-area metrics
+      const profitPerArea = area > 0 ? (profit / area) : profit;
+      const revenuePerArea = area > 0 ? (revenue / area) : revenue;
+
+      // Format numbers
+      function fmt(n){ return Number.isFinite(n) ? n.toLocaleString(undefined, {maximumFractionDigits:2}) : '—' }
+
+      resultsEl.innerHTML = `
+        <div style="display:grid;gap:.5rem">
+          <div class="result">Estimated revenue: ₹ ${fmt(revenue)}</div>
+          <div class="result">Estimated profit: ₹ ${fmt(profit)}</div>
+          <div class="small muted">Revenue per ${areaUnit}: ₹ ${fmt(revenuePerArea)}</div>
+          <div class="small muted">Profit per ${areaUnit}: ₹ ${fmt(profitPerArea)}</div>
+          <div class="small muted">ROI: ${roi === null ? '—' : fmt(roi) + ' %'}</div>
+        </div>
+      `;
+    }
+
+    function clearCalculator(){
+      ['area','yield','price','costs'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('calcResults').innerHTML = '';
+    }
+
+    // ---------- Newsletter ----------
+    function subscribe(){
+      const email = document.getElementById('emailNews').value.trim();
+      const msg = document.getElementById('newsMsg');
+      if(!email || !email.includes('@')){ msg.textContent = 'Enter a valid email.'; return; }
+      msg.textContent = 'Subscribed — check your inbox for confirmation (demo).';
+      document.getElementById('emailNews').value = '';
+    }
+
+    // ---------- Print tips ----------
+    function downloadTips(){
+      // Create a printable window with the current tips
+      const q = document.getElementById('searchTips').value.trim().toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+      const filtered = TIPS.filter(t => {
+        const inQ = q === '' || (t.title + ' ' + t.desc + ' ' + t.category).toLowerCase().includes(q);
+        const inCat = !cat || t.category === cat;
+        return inQ && inCat;
+      });
+
+      let html = `<html><head><title>Farmers Profit Tips — Printable</title>
+        <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px;color:#06221a}h1{color:#0b6b45}article{margin-bottom:14px;border-bottom:1px solid #ddd;padding-bottom:8px}</style>
+        </head><body><h1>Farmers Profit Tips</h1><p>Generated: ${new Date().toLocaleString()}</p>`;
+      filtered.forEach(t => {
+        html += `<article><h2>${t.title}</h2><div style="color:#666">${t.category}</div><p>${t.desc}</p></article>`;
+      });
+      html += `</body></html>`;
+
+      const w = window.open('', '_blank');
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+    }
+
+    // ---------- Helpers ----------
+    function scrollToId(id){
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    // Initialize on load
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderTips();
+  </script>
+
+
+</body>
+</html>
